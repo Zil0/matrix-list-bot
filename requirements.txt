@@ -1,1 +1,1 @@
-matrix_client
+-e git+https://github.com/Zil0/matrix-python-sdk.git@e2e_new#egg=matrix_client[e2e]
