@@ -1,0 +1,5 @@
+__pycache__/
+env/
+shelf
+config.py
+tags
