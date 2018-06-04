@@ -15,8 +15,9 @@ logger = logging.getLogger(__name__)
 class Bot:
 
     def __init__(self, hs_url, username, password):
-        self.cli = MatrixClient(hs_url)
-        self.cli.login_with_password(username=username, password=password)
+        self.cli = MatrixClient(hs_url, encryption=True)
+        self.cli.login(username=username, password=password)
+
         self.shelf = shelve.open(data_file, writeback=True)
         signal.signal(signal.SIGTERM, self.close_shelf)
         signal.signal(signal.SIGINT, self.close_shelf)
@@ -37,6 +38,7 @@ class Bot:
         room = self.cli.join_room(room_id)
         # Force a sync in order not to process previous room messages
         self.cli._sync()
+
         self.add_local_bot(room)
         self.joined_rooms[room_id] = room
         room.send_notice(f'Hi! I\'m a list keeping bot. Send {LocalBot.prefix}help'
