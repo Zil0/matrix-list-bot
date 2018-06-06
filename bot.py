@@ -34,6 +34,8 @@ class Bot:
 
     def on_invite(self, room_id, state):
         room = self.cli.join_room(room_id)
+        # Force a sync in order not to process previous room messages
+        self.cli._sync()
         self.add_local_bot(room)
         self.joined_rooms[room_id] = room
         room.send_text(f'Hi! I\'m a list keeping bot. Send {LocalBot.prefix}help'
