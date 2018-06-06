@@ -63,6 +63,7 @@ class LocalBot:
         'show': 'name: Print a list.',
         'info': ('name index: Print additional information about an item, such as date '
                  'added.'),
+        'goaway': ': Leave the room.',
         'help': ': Print this help.'
     }
 
@@ -84,7 +85,9 @@ class LocalBot:
 
         sender = self.api.get_display_name(event['sender'])
         try:
-            self.room.send_text(self.handle_command(command, args, sender))
+            text = self.handle_command(command, args, sender)
+            if text:
+                self.room.send_text(text)
         except (IndexError, ValueError) as e:
             self.room.send_text('Wrong usage. Use !help to learn more.')
             logger.exception('Incorrect usage command.')
@@ -97,6 +100,10 @@ class LocalBot:
             text += '\n'.join(f'{self.prefix}{k} {v}'
                               for k, v in self.commands.items())
             return text
+        elif command == 'goaway':
+            self.room.send_text('bye!')
+            self.room.leave()
+            return
         else:
             name = args.pop(0)
             if command == 'new':
