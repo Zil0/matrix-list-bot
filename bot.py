@@ -60,7 +60,7 @@ class LocalBot:
         'add': 'name item: Add a new item to a list.',
         'remove': ('name [index [index...]]: Remove list items by index, or the whole '
                    'list if no indexes are given.'),
-        'show': 'name: Print a list.',
+        'show': '[name]: Print a list, or all available lists if no name is given.',
         'info': ('name index: Print additional information about an item, such as date '
                  'added.'),
         'goaway': ': Leave the room.',
@@ -105,7 +105,10 @@ class LocalBot:
             self.room.leave()
             return
         else:
-            name = args.pop(0)
+            try:
+                name = args.pop(0)
+            except IndexError:
+                name = None
             if command == 'new':
                 if name in self.lists:
                     return f'List {name} already exists.'
@@ -120,7 +123,10 @@ class LocalBot:
                     del self.lists[name]
                     return f'List {name} has been deleted.'
             elif command == 'show':
-                return str(self.lists[name])
+                if name:
+                    return str(self.lists[name])
+                else:
+                    return f'Available lists: {list(self.lists)}'
             elif command == 'info':
                 item = self.lists[name][int(args[0])]
                 return (f'Item number {args[0]} "{item.value}" was added by {item.author}'
