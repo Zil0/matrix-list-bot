@@ -120,7 +120,10 @@ class LocalBot:
                 return self.lists[name].add(sender, ' '.join(args))
             elif command == 'remove':
                 if args:
-                    return self.lists[name].remove([int(i) for i in args])
+                    indexes = [int(i) for i in args if int(i) >= 0]
+                    if not indexes:
+                        raise ValueError
+                    return self.lists[name].remove(indexes)
                 else:
                     del self.lists[name]
                     return f'List {name} has been deleted.'
@@ -130,6 +133,9 @@ class LocalBot:
                 else:
                     return f'Available lists: {list(self.lists)}'
             elif command == 'info':
-                item = self.lists[name][int(args[0])]
+                index = int(args[0])
+                if index < 0:
+                    raise ValueError
+                item = self.lists[name][index]
                 return (f'Item number {args[0]} "{item.value}" was added by {item.author}'
                         f'on {item.time}.')
