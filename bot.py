@@ -38,7 +38,7 @@ class Bot:
         self.cli._sync()
         self.add_local_bot(room)
         self.joined_rooms[room_id] = room
-        room.send_text(f'Hi! I\'m a list keeping bot. Send {LocalBot.prefix}help'
+        room.send_notice(f'Hi! I\'m a list keeping bot. Send {LocalBot.prefix}help'
                        ' to learn how to use me.')
         logger.info(f'Received an invite for room {room_id}, and joined.')
 
@@ -87,12 +87,12 @@ class LocalBot:
         try:
             text = self.handle_command(command, args, sender)
             if text:
-                self.room.send_text(text)
+                self.room.send_notice(text)
         except (IndexError, ValueError) as e:
-            self.room.send_text('Wrong usage. Use !help to learn more.')
+            self.room.send_notice('Wrong usage. Use !help to learn more.')
             logger.exception('Incorrect usage command.')
         except KeyError:
-            self.room.send_text('List does not exist.')
+            self.room.send_notice('List does not exist.')
 
     def handle_command(self, command, args, sender):
         if command == 'help':
@@ -101,7 +101,7 @@ class LocalBot:
                               for k, v in self.commands.items())
             return text
         elif command == 'goaway':
-            self.room.send_text('bye!')
+            self.room.send_notice('bye!')
             self.room.leave()
             return
         else:
