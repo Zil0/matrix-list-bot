@@ -22,6 +22,7 @@ class Bot:
         signal.signal(signal.SIGINT, self.close_shelf)
         self.cli.add_invite_listener(self.on_invite)
         self.joined_rooms = self.cli.get_rooms()
+        logger.info(f'Joined to {[r.display_name for r in self.joined_rooms.values()]}')
         self.add_room_listeners()
 
     def run(self):
@@ -40,7 +41,7 @@ class Bot:
         self.joined_rooms[room_id] = room
         room.send_notice(f'Hi! I\'m a list keeping bot. Send {LocalBot.prefix}help'
                        ' to learn how to use me.')
-        logger.info(f'Received an invite for room {room_id}, and joined.')
+        logger.info(f'Received an invite for room {room.display_name}, and joined.')
 
     def add_local_bot(self, room):
         lbot = LocalBot(room, self.cli.api, self.shelf)
@@ -49,6 +50,7 @@ class Bot:
     def close_shelf(self, *args):
         logger.info('Closing shelf...')
         self.shelf.close()
+        logger.info('Shelf is closed.')
         sys.exit()
 
 
@@ -90,7 +92,6 @@ class LocalBot:
                 self.room.send_notice(text)
         except (IndexError, ValueError) as e:
             self.room.send_notice('Wrong usage. Use !help to learn more.')
-            logger.exception('Incorrect usage command.')
         except KeyError:
             self.room.send_notice('List does not exist.')
 
@@ -103,6 +104,7 @@ class LocalBot:
         elif command == 'goaway':
             self.room.send_notice('bye!')
             self.room.leave()
+            logger.info(f'Left room {self.room.display_name}')
             return
         else:
             try:
