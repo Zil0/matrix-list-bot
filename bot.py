@@ -14,9 +14,9 @@ logger = logging.getLogger(__name__)
 
 class Bot:
 
-    def __init__(self, hs_url, username, password):
+    def __init__(self, hs_url, username, password, device_id):
         self.cli = MatrixClient(hs_url, encryption=True)
-        self.cli.login(username=username, password=password)
+        self.cli.login(username=username, password=password, device_id=device_id)
 
         self.shelf = shelve.open(data_file, writeback=True)
         signal.signal(signal.SIGTERM, self.close_shelf)
