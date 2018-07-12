@@ -106,11 +106,13 @@ class LocalBot:
             self.room.leave()
             logger.info(f'Left room {self.room.display_name}')
             return
+        elif command == 'show':
+            if args:
+                return str(self.lists[args[0]])
+            else:
+                return f'Available lists: {list(self.lists)}'
         else:
-            try:
-                name = args.pop(0)
-            except IndexError:
-                name = None
+            name = args.pop(0)
             if command == 'new':
                 if name in self.lists:
                     return f'List {name} already exists.'
@@ -127,11 +129,6 @@ class LocalBot:
                 else:
                     del self.lists[name]
                     return f'List {name} has been deleted.'
-            elif command == 'show':
-                if name:
-                    return str(self.lists[name])
-                else:
-                    return f'Available lists: {list(self.lists)}'
             elif command == 'info':
                 index = int(args[0])
                 if index < 0:
