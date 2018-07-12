@@ -13,16 +13,16 @@ class List:
 
     def remove(self, indexes):
         for index in sorted(indexes, reverse=True):
-            self.items.pop(index)
+            self.items.pop(index - 1)
         return f'Removed given item{"s" * (len(indexes) > 1)} from list {self.name}.'
 
     def __str__(self):
         text = f'List {self.name}:\n'
-        text += '\n'.join(f'{i}- {item}' for i, item in enumerate(self.items))
+        text += '\n'.join(f'{i + 1}- {item}' for i, item in enumerate(self.items))
         return text
 
     def __getitem__(self, i):
-        return self.items[i]
+        return self.items[i - 1]
 
 
 class Item:
