@@ -26,7 +26,7 @@ class Bot:
         self.add_room_listeners()
 
     def run(self):
-        self.cli.listen_forever()
+        self.cli.listen_forever(exception_handler=self.sync_exception_handler)
         logger.info('Bot started.')
 
     def add_room_listeners(self):
@@ -52,6 +52,10 @@ class Bot:
         self.shelf.close()
         logger.info('Shelf is closed.')
         sys.exit()
+
+    @staticmethod
+    def sync_exception_handler(exception):
+        logger.warning(exception)
 
 
 class LocalBot:
