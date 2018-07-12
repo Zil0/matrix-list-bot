@@ -30,7 +30,7 @@ class Bot:
         logger.info('Bot started.')
 
     def add_room_listeners(self):
-        for room_id, room in self.joined_rooms.items():
+        for room in self.joined_rooms.values():
             self.add_local_bot(room)
 
     def on_invite(self, room_id, state):
