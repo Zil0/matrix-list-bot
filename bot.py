@@ -40,7 +40,7 @@ class Bot:
         self.add_local_bot(room)
         self.joined_rooms[room_id] = room
         room.send_notice(f'Hi! I\'m a list keeping bot. Send {LocalBot.prefix}help'
-                       ' to learn how to use me.')
+                         ' to learn how to use me.')
         logger.info(f'Received an invite for room {room.display_name}, and joined.')
 
     def add_local_bot(self, room):
